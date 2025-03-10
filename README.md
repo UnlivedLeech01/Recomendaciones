@@ -43,6 +43,12 @@ Además, debes asegurarte de que XAMPP esté ejecutándose antes de iniciar la a
 - Plantillas HTML para Login y Registro (Thymeleaf)
 - Configuración básica de Spring Boot
 
+![image](https://github.com/user-attachments/assets/9c7f65f2-cd65-4ce7-a9ed-c31090b30e6c)
+![image](https://github.com/user-attachments/assets/486dbe72-090a-4e51-8c57-87fb9e8aff32)
+![image](https://github.com/user-attachments/assets/23f0aae0-c8c2-4baf-9af4-928c32b8dcef)
+![image](https://github.com/user-attachments/assets/d2ccc650-64ac-4c83-b7cc-e4472d33aab9)
+
+
 ## Próximos Pasos
 - Integrar base de datos MySQL con Spring Data JPA
 - Implementar autenticación segura con JWT o sesiones
