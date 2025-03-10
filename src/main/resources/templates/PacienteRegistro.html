@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Paciente</title>
+    <link rel="stylesheet" href="/css/estilo.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Registro de Paciente</h2>
+        <form th:action="@{/paciente/registro}" method="post">
+            <input type="text" name="nombre" placeholder="Nombre">
+            <input type="text" name="apellidos" placeholder="Apellidos">
+            <input type="date" name="fechaNacimiento" placeholder="Fecha de Nacimiento">
+            <input type="text" name="genero" placeholder="Género">
+            <input type="text" name="direccion" placeholder="Dirección">
+            <input type="text" name="telefono" placeholder="Teléfono de contacto">
+            <input type="email" name="correo" placeholder="Correo Electrónico">
+            <input type="text" name="contactoEmergencia" placeholder="Contacto de emergencia">
+            <input type="text" name="telefonoEmergencia" placeholder="Teléfono de emergencia">
+            <input type="text" name="enfermedadesCronicas" placeholder="Enfermedades crónicas">
+            <input type="text" name="alergias" placeholder="Alergias conocidas">
+            <button type="submit">Registrar Paciente</button>
+        </form>
+        <a class="link" th:href="@{/paciente/inicio}">Volver al inicio</a>
+    </div>
+</body>
+</html>

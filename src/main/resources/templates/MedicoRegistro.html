@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Médico</title>
+    <link rel="stylesheet" href="/css/estilo.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Registro de Médico</h2>
+        <form th:action="@{/medico/registro}" method="post">
+            <input type="text" name="nombre" placeholder="Nombre">
+            <input type="text" name="apellidos" placeholder="Apellidos">
+            <input type="text" name="licencia" placeholder="Licencia Médica">
+            <input type="text" name="especialidad" placeholder="Especialidad">
+            <input type="email" name="correo" placeholder="Correo Electrónico">
+            <input type="password" name="contrasena" placeholder="Contraseña">
+            <button type="submit">Registrar Médico</button>
+        </form>
+        <a class="link" th:href="@{/medico/inicio}">Volver al inicio</a>
+    </div>
+</body>
+</html>

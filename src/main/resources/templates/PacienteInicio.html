@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión</title>
+    <title>Inicio Paciente</title>
     <link rel="stylesheet" href="/css/estilo.css">
 </head>
 <body>
     <div class="container">
-        <h2>Iniciar Sesión</h2>
-        <form th:action="@{/login}" method="post">
-            <input type="text" name="username" placeholder="Usuario">
-            <input type="password" name="password" placeholder="Contraseña">
+        <h2>Inicio de Sesión - Paciente</h2>
+        <form th:action="@{/paciente/login}" method="post">
+            <input type="text" name="usuario" placeholder="Usuario">
+            <input type="password" name="contrasena" placeholder="Contraseña">
             <button type="submit">Ingresar</button>
         </form>
-        <a class="link" th:href="@{/registro}">¿No tienes cuenta? Regístrate</a>
+        <a class="link" th:href="@{/paciente/registro}">Registrarse</a>
     </div>
 </body>
 </html>

@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenido</title>
+    <title>Bienvenido Medico</title>
     <link rel="stylesheet" href="/css/estilo.css">
 </head>
 <body>
     <div class="container">
-        <h2>¡Bienvenido!</h2>
+        <h2>¡Bienvenido Medico!</h2>
         <p>Has iniciado sesión con éxito.</p>
-        <button onclick="window.location.href='@{/login}'">Cerrar Sesión</button>
+        <button th:onclick="'window.location.href=' + @{/medico/inicio}">Cerrar Sesión</button>
     </div>
 </body>
 </html>

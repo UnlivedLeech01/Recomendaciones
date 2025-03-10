@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión Medico</title>
+    <link rel="stylesheet" href="/css/estilo.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Iniciar Sesión - Medico</h2>
+        <form th:action="@{/medico/login}" method="post">
+            <input type="text" name="usuario" placeholder="Usuario">
+            <input type="password" name="contrasena" placeholder="Contraseña">
+            <button type="submit">Ingresar</button>
+        </form>
+        <a class="link" th:href="@{/medico/registro}">¿No tienes cuenta? Regístrate</a>
+    </div>
+</body>
+</html>
