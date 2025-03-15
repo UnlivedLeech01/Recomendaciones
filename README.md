@@ -3,6 +3,9 @@
 ## Descripción
 Este proyecto es una aplicación de autenticación de usuarios desarrollada con Spring Boot. Actualmente, cuenta con plantillas funcionales para el login y el registro de usuarios.
 
+## Documentación
+La documentación de este documento así como las plantillas UML se encuentran en las carpetas "Documentos" y "UML"
+
 ## Tecnologías Utilizadas
 - **Java:** 21 (Corretto)
 - **Maven:** 3.9.9
