@@ -1,5 +1,8 @@
 package escom.ipn.SistemaMedico.auth.controller;
 
+import escom.ipn.SistemaMedico.auth.service.AdminService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,6 +11,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class AdminController {
+
+    @Autowired
+    private AdminService adminService;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping("/admin/bienvenido")
     public String showAdminWelcomePage() {
@@ -23,8 +32,8 @@ public class AdminController {
     public String loginAdmin(@RequestParam("usuario") String usuario, 
                              @RequestParam("contrasena") String contrasena, 
                              RedirectAttributes redirectAttributes) {
-        // Aquí puedes agregar la lógica de autenticación
-        if ("admin".equals(usuario) && "admin".equals(contrasena)) {
+        // Lógica de autenticación
+        if (adminService.authenticate(usuario, contrasena)) {
             return "redirect:/admin/bienvenido";
         } else {
             redirectAttributes.addFlashAttribute("error", "Usuario o contraseña incorrectos");
@@ -42,9 +51,16 @@ public class AdminController {
                                 @RequestParam("correo") String correo, 
                                 @RequestParam("contrasena") String contrasena, 
                                 RedirectAttributes redirectAttributes) {
-        // Aquí puedes agregar la lógica de registro
-        // Por ahora, simplemente redirigimos a la página de inicio de sesión
-        redirectAttributes.addFlashAttribute("mensaje", "Registro exitoso. Por favor, inicia sesión.");
-        return "redirect:/admin/inicio";
+        // Encriptar la contraseña
+        String hashedPassword = passwordEncoder.encode(contrasena);
+
+        // Lógica de registro
+        if (adminService.register(usuario, correo, hashedPassword)) {
+            redirectAttributes.addFlashAttribute("mensaje", "Registro exitoso. Por favor, inicia sesión.");
+            return "redirect:/admin/inicio";
+        } else {
+            redirectAttributes.addFlashAttribute("error", "El usuario ya existe.");
+            return "redirect:/admin/registro";
+        }
     }
 }
