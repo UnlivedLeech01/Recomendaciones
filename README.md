@@ -20,7 +20,7 @@ Antes de ejecutar el proyecto, asegúrate de tener instalado lo siguiente:
 
 Además, debes asegurarte de que XAMPP esté ejecutándose antes de iniciar la aplicación.
 
-## Instalación y Ejecución
+## Instalación y Ejecución con XAMPP
 ### 1. Clonar el Repositorio
    ```bash
    git clone https://github.com/tu-usuario/tu-repositorio.git
@@ -42,18 +42,32 @@ Además, debes asegurarte de que XAMPP esté ejecutándose antes de iniciar la a
    http://localhost:8080
    ```
 
+### Modo Docker
+1. Asegurarse de que XAMPP esté apagado (para evitar conflictos en el puerto MySQL).
+2. Ejecutar el siguiente comando en la terminal:
+   ```sh
+   docker-compose up --build
+   ```
+
 ## Funcionalidades Implementadas
 - Plantillas HTML para Login y Registro (Thymeleaf)
 - Configuración básica de Spring Boot
+- Implementación de bae de datos
+- Ejecución con Docker
+- Administración de roles
+- Implementación de cambio de tema claro y oscuro
 
-![image](https://github.com/user-attachments/assets/9c7f65f2-cd65-4ce7-a9ed-c31090b30e6c)
-![image](https://github.com/user-attachments/assets/486dbe72-090a-4e51-8c57-87fb9e8aff32)
-![image](https://github.com/user-attachments/assets/23f0aae0-c8c2-4baf-9af4-928c32b8dcef)
-![image](https://github.com/user-attachments/assets/d2ccc650-64ac-4c83-b7cc-e4472d33aab9)
+![image](https://github.com/user-attachments/assets/2628ac31-4c0d-46b8-b62e-f40ab087cab1)
+![image](https://github.com/user-attachments/assets/e8ac864c-ffe1-43f2-ba17-1e6e6e14a5d8)
+![image](https://github.com/user-attachments/assets/35bc81fd-742b-49a4-9a6f-dd130af96766)
+![image](https://github.com/user-attachments/assets/58c3de12-9dce-4e3a-9f4d-20f818b93b3e)
+
+
 
 
 ## Próximos Pasos
-- Integrar base de datos MySQL con Spring Data JPA
 - Implementar autenticación segura con JWT o sesiones
 - Manejo de roles y permisos
+- Registro exitoso con la base de datos
+- Correción de errores con controladores
 
