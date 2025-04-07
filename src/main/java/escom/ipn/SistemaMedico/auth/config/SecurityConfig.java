@@ -13,19 +13,32 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(authorize -> authorize
                             .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/public/**",
-                                    "/admin/registro", "/medico/registro", "/paciente/registro").permitAll()
+                                    "/admin/registro", "/medico/registro", "/paciente/registro", "/admin/registro", 
+                                    "/admin/inicio", "/admin/login", "/bienvenida").permitAll()
                             .anyRequest().authenticated()
             )
             .formLogin(form -> form
-                            .loginPage("/selecRol") // Ruta personalizada para la página de inicio de sesión
+                            .loginPage("/bienvenida")
+                            .successHandler((request, response, authentication) -> {
+                                String role = authentication.getAuthorities().iterator().next().getAuthority();
+                                if (role.equals("ROLE_ADMIN")) {
+                                    response.sendRedirect("/admin/dashboard");
+                                } else if (role.equals("ROLE_MEDICO")) {
+                                    response.sendRedirect("/medico/dashboard");
+                                } else if (role.equals("ROLE_PACIENTE")) {
+                                    response.sendRedirect("/paciente/dashboard");
+                                } else {
+                                    response.sendRedirect("/bienvenida");
+                                }
+                            })
                             .permitAll()
             )
             .logout(logout -> logout
                             .logoutUrl("/logout")
-                            .logoutSuccessUrl("/login?logout")
+                            .logoutSuccessUrl("/bienvenida?logout")
                             .permitAll()
             )
-            .csrf(csrf -> csrf.disable()); // Deshabilitar CSRF si no es necesario (opcional)
+            .csrf(csrf -> csrf.disable());
         return http.build();
     }
 }
