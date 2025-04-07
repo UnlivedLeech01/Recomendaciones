@@ -14,7 +14,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                             .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/public/**",
                                     "/admin/registro", "/medico/registro", "/paciente/registro", "/admin/registro", 
-                                    "/admin/inicio", "/admin/login", "/bienvenida").permitAll()
+                                    "/admin/inicio", "/admin/login", "/bienvenida", "/medico/inicio", "/medico/login",
+                                    "/paciente/inicio", "/paciente/login").permitAll()
                             .anyRequest().authenticated()
             )
             .formLogin(form -> form
