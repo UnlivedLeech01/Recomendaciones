@@ -1,6 +1,6 @@
 package escom.ipn.SistemaMedico.auth.controller;
 
-import escom.ipn.SistemaMedico.auth.model.Usuario;
+import escom.ipn.SistemaMedico.auth.model.Medico;
 import escom.ipn.SistemaMedico.auth.service.MedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -34,25 +34,38 @@ public class MedicoController {
                                  @RequestParam("correo") String correo,
                                  @RequestParam("contrasena") String contrasena,
                                  RedirectAttributes redirectAttributes) {
-        // Encriptar la contraseña
-        String hashedPassword = passwordEncoder.encode(contrasena);
+        try {
+            // Validar los datos del formulario
+            if (nombre == null || nombre.isEmpty() || apellidos == null || apellidos.isEmpty() ||
+                licencia == null || licencia.isEmpty() || especialidad == null || especialidad.isEmpty() ||
+                correo == null || correo.isEmpty() || contrasena == null || contrasena.isEmpty()) {
+                redirectAttributes.addFlashAttribute("error", "Todos los campos son obligatorios.");
+                return "redirect:/medico/registro";
+            }
 
-        // Crear un nuevo objeto Usuario
-        Usuario nuevoMedico = new Usuario();
-        nuevoMedico.setNombre(nombre + " " + apellidos);
-        nuevoMedico.setCorreo(correo);
-        nuevoMedico.setContrasena(hashedPassword);
-        nuevoMedico.setLicencia(licencia); // Suponiendo que el modelo Usuario tiene este campo
-        nuevoMedico.setEspecialidad(especialidad); // Suponiendo que el modelo Usuario tiene este campo
+            // Encriptar la contraseña
+            String hashedPassword = passwordEncoder.encode(contrasena);
 
-        // Intentar registrar al médico
-        boolean registrado = medicoService.register(nuevoMedico, "Médico");
+            // Crear un nuevo objeto Medico
+            Medico nuevoMedico = new Medico();
+            nuevoMedico.setNombre(nombre + " " + apellidos);
+            nuevoMedico.setCorreo(correo);
+            nuevoMedico.setContrasena(hashedPassword);
+            nuevoMedico.setLicencia(licencia);
+            nuevoMedico.setEspecialidad(especialidad);
 
-        if (registrado) {
-            redirectAttributes.addFlashAttribute("mensaje", "Registro exitoso. Por favor, inicia sesión.");
-            return "redirect:/medico/inicio";
-        } else {
-            redirectAttributes.addFlashAttribute("error", "El médico ya existe.");
+            // Intentar registrar al médico
+            boolean registrado = medicoService.register(nuevoMedico);
+
+            if (registrado) {
+                redirectAttributes.addFlashAttribute("mensaje", "Registro exitoso. Por favor, inicia sesión.");
+                return "redirect:/medico/inicio";
+            } else {
+                redirectAttributes.addFlashAttribute("error", "El médico ya existe.");
+                return "redirect:/medico/registro";
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al registrar el médico: " + e.getMessage());
             return "redirect:/medico/registro";
         }
     }
@@ -68,13 +81,18 @@ public class MedicoController {
     public String loginMedico(@RequestParam("correo") String correo,
                               @RequestParam("contrasena") String contrasena,
                               RedirectAttributes redirectAttributes) {
-        // Verificar las credenciales
-        boolean autenticado = medicoService.authenticate(correo, contrasena);
+        try {
+            // Verificar las credenciales
+            boolean autenticado = medicoService.authenticate(correo, contrasena);
 
-        if (autenticado) {
-            return "redirect:/medico/dashboard"; // Redirigir al dashboard del médico
-        } else {
-            redirectAttributes.addFlashAttribute("error", "Credenciales incorrectas.");
+            if (autenticado) {
+                return "redirect:/medico/dashboard"; // Redirigir al dashboard del médico
+            } else {
+                redirectAttributes.addFlashAttribute("error", "Credenciales incorrectas.");
+                return "redirect:/medico/inicio";
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al iniciar sesión: " + e.getMessage());
             return "redirect:/medico/inicio";
         }
     }

@@ -1,6 +1,6 @@
 package escom.ipn.SistemaMedico.auth.service;
 
-import escom.ipn.SistemaMedico.auth.model.Usuario;
+import escom.ipn.SistemaMedico.auth.model.Paciente;
 import escom.ipn.SistemaMedico.auth.model.Rol;
 import escom.ipn.SistemaMedico.auth.repository.UsuarioRepository;
 import escom.ipn.SistemaMedico.auth.repository.RolRepository;
@@ -24,31 +24,34 @@ public class PacienteService {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Transactional
-    public boolean register(Usuario usuario, String rolNombre) {
+    public boolean register(Paciente paciente) {
         // Validar si el correo ya está registrado
-        if (usuarioRepository.findByCorreo(usuario.getCorreo()).isPresent()) {
-            return false; // Usuario ya existe
+        if (usuarioRepository.findByCorreo(paciente.getCorreo()).isPresent()) {
+            return false; // Paciente ya existe
         }
 
-        // Buscar el rol por nombre
-        Optional<Rol> optionalRol = rolRepository.findByNombre(rolNombre);
+        // Buscar el rol "ROLE_PACIENTE"
+        Optional<Rol> optionalRol = rolRepository.findByNombre("ROLE_PACIENTE");
         if (optionalRol.isEmpty()) {
-            throw new RuntimeException("El rol " + rolNombre + " no existe en la base de datos.");
+            throw new RuntimeException("El rol ROLE_PACIENTE no existe en la base de datos.");
         }
         Rol rol = optionalRol.get();
 
-        // Guardar el usuario en la tabla "usuarios"
-        Usuario usuarioGuardado = usuarioRepository.save(usuario);
+        // Encriptar la contraseña
+        paciente.setContrasena(passwordEncoder.encode(paciente.getContrasena()));
+
+        // Guardar el paciente en la tabla "usuarios"
+        Paciente pacienteGuardado = usuarioRepository.save(paciente);
 
         // Insertar la relación en la tabla "usuario_roles"
-        usuarioRepository.insertUsuarioRol(usuarioGuardado.getId(), rol.getId());
+        usuarioRepository.insertUsuarioRol(pacienteGuardado.getId(), rol.getId());
 
         return true;
     }
 
     public boolean authenticate(String correo, String contrasena) {
-        // Buscar al usuario por correo
-        Optional<Usuario> paciente = usuarioRepository.findByCorreo(correo);
+        // Buscar al paciente por correo
+        Optional<Paciente> paciente = usuarioRepository.findByCorreo(correo).map(user -> (Paciente) user);
 
         // Verificar las credenciales
         if (paciente.isPresent() && passwordEncoder.matches(contrasena, paciente.get().getContrasena())) {

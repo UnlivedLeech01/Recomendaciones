@@ -1,6 +1,6 @@
 package escom.ipn.SistemaMedico.auth.controller;
 
-import escom.ipn.SistemaMedico.auth.model.Usuario;
+import escom.ipn.SistemaMedico.auth.model.Paciente;
 import escom.ipn.SistemaMedico.auth.service.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,28 +34,45 @@ public class PacienteController {
                                    @RequestParam("telefonoEmergencia") String telefonoEmergencia,
                                    @RequestParam("enfermedadesCronicas") String enfermedadesCronicas,
                                    @RequestParam("alergias") String alergias,
+                                   @RequestParam("contrasena") String contrasena,
                                    RedirectAttributes redirectAttributes) {
-        // Crear un nuevo objeto Usuario
-        Usuario nuevoPaciente = new Usuario();
-        nuevoPaciente.setNombre(nombre + " " + apellidos);
-        nuevoPaciente.setCorreo(correo);
-        nuevoPaciente.setFechaNacimiento(fechaNacimiento);
-        nuevoPaciente.setGenero(genero);
-        nuevoPaciente.setDireccion(direccion);
-        nuevoPaciente.setTelefono(telefono);
-        nuevoPaciente.setContactoEmergencia(contactoEmergencia);
-        nuevoPaciente.setTelefonoEmergencia(telefonoEmergencia);
-        nuevoPaciente.setEnfermedadesCronicas(enfermedadesCronicas);
-        nuevoPaciente.setAlergias(alergias);
+        try {
+            // Validar los datos del formulario
+            if (nombre == null || nombre.isEmpty() || apellidos == null || apellidos.isEmpty() ||
+                fechaNacimiento == null || fechaNacimiento.isEmpty() || genero == null || genero.isEmpty() ||
+                direccion == null || direccion.isEmpty() || telefono == null || telefono.isEmpty() ||
+                correo == null || correo.isEmpty() || contactoEmergencia == null || contactoEmergencia.isEmpty() ||
+                telefonoEmergencia == null || telefonoEmergencia.isEmpty() || contrasena == null || contrasena.isEmpty()) {
+                redirectAttributes.addFlashAttribute("error", "Todos los campos son obligatorios.");
+                return "redirect:/paciente/registro";
+            }
 
-        // Intentar registrar al paciente
-        boolean registrado = pacienteService.register(nuevoPaciente, "Paciente");
+            // Crear un nuevo objeto Paciente
+            Paciente nuevoPaciente = new Paciente();
+            nuevoPaciente.setNombre(nombre + " " + apellidos);
+            nuevoPaciente.setCorreo(correo);
+            nuevoPaciente.setContrasena(contrasena); // La contraseña será encriptada en el servicio
+            nuevoPaciente.setFechaNacimiento(fechaNacimiento);
+            nuevoPaciente.setGenero(genero);
+            nuevoPaciente.setDireccion(direccion);
+            nuevoPaciente.setTelefono(telefono);
+            nuevoPaciente.setContactoEmergencia(contactoEmergencia);
+            nuevoPaciente.setTelefonoEmergencia(telefonoEmergencia);
+            nuevoPaciente.setEnfermedadesCronicas(enfermedadesCronicas);
+            nuevoPaciente.setAlergias(alergias);
 
-        if (registrado) {
-            redirectAttributes.addFlashAttribute("mensaje", "Registro exitoso. Por favor, inicia sesión.");
-            return "redirect:/paciente/inicio";
-        } else {
-            redirectAttributes.addFlashAttribute("error", "El paciente ya existe.");
+            // Intentar registrar al paciente
+            boolean registrado = pacienteService.register(nuevoPaciente);
+
+            if (registrado) {
+                redirectAttributes.addFlashAttribute("mensaje", "Registro exitoso. Por favor, inicia sesión.");
+                return "redirect:/paciente/inicio";
+            } else {
+                redirectAttributes.addFlashAttribute("error", "El paciente ya existe.");
+                return "redirect:/paciente/registro";
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al registrar el paciente: " + e.getMessage());
             return "redirect:/paciente/registro";
         }
     }
@@ -71,13 +88,18 @@ public class PacienteController {
     public String loginPaciente(@RequestParam("correo") String correo,
                                 @RequestParam("contrasena") String contrasena,
                                 RedirectAttributes redirectAttributes) {
-        // Verificar las credenciales
-        boolean autenticado = pacienteService.authenticate(correo, contrasena);
+        try {
+            // Verificar las credenciales
+            boolean autenticado = pacienteService.authenticate(correo, contrasena);
 
-        if (autenticado) {
-            return "redirect:/paciente/dashboard"; // Redirigir al dashboard del paciente
-        } else {
-            redirectAttributes.addFlashAttribute("error", "Credenciales incorrectas.");
+            if (autenticado) {
+                return "redirect:/paciente/dashboard"; // Redirigir al dashboard del paciente
+            } else {
+                redirectAttributes.addFlashAttribute("error", "Credenciales incorrectas.");
+                return "redirect:/paciente/inicio";
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al iniciar sesión: " + e.getMessage());
             return "redirect:/paciente/inicio";
         }
     }
