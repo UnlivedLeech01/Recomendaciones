@@ -1,8 +1,9 @@
 package escom.ipn.SistemaMedico.auth.service;
 
-import escom.ipn.SistemaMedico.auth.model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import escom.ipn.SistemaMedico.auth.model.Usuario;
 
 @Service
 public class AdminService {
@@ -13,7 +14,7 @@ public class AdminService {
     public boolean register(Usuario usuario) {
         try {
             // Registrar al usuario con el rol "ROLE_ADMIN"
-            usuarioService.register(usuario, "ROLE_ADMIN");
+            usuarioService.register(usuario, "ADMIN");
             return true;
         } catch (IllegalArgumentException e) {
             // Manejar el caso en que el correo ya esté registrado

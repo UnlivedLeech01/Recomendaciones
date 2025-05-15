@@ -1,15 +1,15 @@
 package escom.ipn.SistemaMedico.auth.service;
 
-import escom.ipn.SistemaMedico.auth.model.Usuario;
-import escom.ipn.SistemaMedico.auth.model.Rol;
-import escom.ipn.SistemaMedico.auth.repository.UsuarioRepository;
-import escom.ipn.SistemaMedico.auth.repository.RolRepository;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import escom.ipn.SistemaMedico.auth.model.Usuario;
+import escom.ipn.SistemaMedico.auth.repository.RolRepository;
+import escom.ipn.SistemaMedico.auth.repository.UsuarioRepository;
 
 @Service
 public class UsuarioService {
@@ -29,22 +29,32 @@ public class UsuarioService {
         if (usuarioRepository.findByCorreo(usuario.getCorreo()).isPresent()) {
             throw new IllegalArgumentException("El correo ya está registrado.");
         }
-
-        // Buscar el rol por nombre
-        Rol rol = rolRepository.findByNombre(rolNombre)
-                .orElseThrow(() -> new RuntimeException("El rol " + rolNombre + " no existe en la base de datos."));
-
+    
+        Long rolId;
+    
+        // Asignar el ID según el rol recibido
+        if ("ADMIN".equalsIgnoreCase(rolNombre)) {
+            rolId = 1L;
+        } else if ("ROLE_MEDICO".equalsIgnoreCase(rolNombre)) {
+            rolId = 2L;
+        } else if ("ROLE_PACIENTE".equalsIgnoreCase(rolNombre)) {
+            rolId = 3L;
+        } else {
+            throw new IllegalArgumentException("El rol proporcionado no es válido: " + rolNombre);
+        }
+    
         // Encriptar la contraseña
         usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
-
+    
         // Guardar el usuario en la tabla "usuarios"
         Usuario usuarioGuardado = usuarioRepository.save(usuario);
-
-        // Insertar la relación en la tabla "usuario_roles"
-        usuarioRepository.insertUsuarioRol(usuarioGuardado.getId(), rol.getId());
-
+    
+        // Insertar la relación en la tabla "usuario_roles" usando el ID fijo del rol
+        usuarioRepository.insertUsuarioRol(usuarioGuardado.getId(), rolId);
+    
         return usuarioGuardado;
     }
+    
 
     public boolean authenticate(String correo, String contrasena) {
         // Buscar al usuario por correo
