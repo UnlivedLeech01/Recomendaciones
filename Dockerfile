@@ -6,7 +6,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Etapa de ejecución
-FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:17-jdk
 WORKDIR /app
 COPY --from=build /app/src/main/resources/templates ./src/main/resources/templates
 COPY --from=build /app/src/main/resources/static ./src/main/resources/static
