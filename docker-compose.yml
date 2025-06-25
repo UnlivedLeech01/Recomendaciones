@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Servicio de la aplicación Spring Boot
   app:
@@ -11,9 +9,12 @@ services:
     depends_on:
       - db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/SistemaMedico
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/tarea2
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=admin
+    volumes:
+      - ./src/main/resources/templates:/app/src/main/resources/templates
+      - ./src/main/resources/static:/app/src/main/resources/static
     networks:
       - app-network
     restart: always
@@ -24,13 +25,13 @@ services:
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_DATABASE=SistemaMedico
+      - MYSQL_DATABASE=tarea2
       - MYSQL_USER=admin
       - MYSQL_PASSWORD=admin
-      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_ROOT_PASSWORD=admin
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./datab.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     networks:
       - app-network
     restart: always

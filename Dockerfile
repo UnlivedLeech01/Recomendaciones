@@ -1,28 +1,15 @@
 # Etapa de construcción
-FROM maven:3.9-eclipse-temurin-21 AS builder
-
+FROM maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /app
+COPY pom.xml . 
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-# Copiar el archivo pom.xml y descargar dependencias
-COPY pom.xml /app/
-RUN mvn dependency:go-offline
-
-# Copiar el código fuente
-COPY src /app/src
-
-# Compilar la aplicación (sin ejecutar pruebas)
-RUN mvn package -DskipTests
-
-# Etapa de ejecución con imagen liviana
-FROM eclipse-temurin:21-jre
-
+# Etapa de ejecución
+FROM eclipse-temurin:17-jre
 WORKDIR /app
-
-# Copiar el jar generado desde la etapa anterior
-COPY --from=builder /app/target/SistemaMedico-0.0.1-SNAPSHOT.jar /app/app.jar
-
-# Exponer el puerto de la app
+COPY --from=build /app/src/main/resources/templates ./src/main/resources/templates
+COPY --from=build /app/src/main/resources/static ./src/main/resources/static
+COPY --from=build /app/target/Recomendaciones-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
-
-# Comando para ejecutar el jar
-CMD ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]

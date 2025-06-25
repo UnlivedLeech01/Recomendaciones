@@ -1,11 +1,11 @@
-package escom.ipn.SistemaMedico.auth;
+package escom.ipn.Recomendaciones;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SistemaMedicoApplication {
+public class RecomendacionesApplication {
     public static void main(String[] args) {
-        SpringApplication.run(SistemaMedicoApplication.class, args);
+        SpringApplication.run(RecomendacionesApplication.class, args);
     }
 }

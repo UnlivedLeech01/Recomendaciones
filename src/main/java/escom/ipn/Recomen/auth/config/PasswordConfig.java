@@ -1,4 +1,4 @@
-package escom.ipn.SistemaMedico.auth.config;
+package escom.ipn.Recomen.auth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

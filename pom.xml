@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>escom.ipn</groupId>
-    <artifactId>SistemaMedico</artifactId>
+    <artifactId>Recomendaciones</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>SistemaMedico</name>
+    <name>Recomendaciones</name>
     <description>Demo project for Spring Boot</description>
     <url/>
     <licenses>
@@ -27,7 +27,7 @@
         <url/>
     </scm>
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -57,7 +57,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.28</version>
+            <version>8.0.33</version>
         </dependency>
 
         <!-- Spring Boot DevTools for live reload during development -->
@@ -100,6 +100,13 @@
             <artifactId>hibernate-validator</artifactId>
             <version>8.0.0.Final</version>
         </dependency>
+
+        <!-- Bootstrap (WebJars) -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>5.3.2</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -108,7 +115,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>escom.ipn.SistemaMedico.auth.SistemaMedicoApplication</mainClass>
+                    <mainClass>escom.ipn.Recomendaciones.RecomendacionesApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
